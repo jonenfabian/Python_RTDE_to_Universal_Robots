@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<rtde_config>
+	<recipe key="state">
+		<field name="target_TCP_pose" type="VECTOR6D"/>
+		<field name="target_qd" type="VECTOR6D"/>
+		<field name="output_int_register_0" type="INT32"/>
+		<field name="output_int_register_1" type="INT32"/>
+		<field name="tcp_force_scalar" type="DOUBLE"/>
+		<field name="actual_TCP_force" type="VECTOR6D"/>
+		<field name="actual_TCP_pose" type="VECTOR6D"/>
+		<field name="actual_q" type="VECTOR6D"/>
+	</recipe>
+	
+	<recipe key="watchdog">
+		<field name="input_int_register_0" type="INT32"/>
+	</recipe>
+
+</rtde_config>
