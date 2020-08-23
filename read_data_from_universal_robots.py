@@ -45,12 +45,6 @@ sensor_data = {}
 watchdog.input_int_register_0 = 0
 ##########################################################################
 #FUNCTIONS
-def Dashboard(string): #Send a command to the Dashboard Server of the Robot
-	Message=string+'\n'
-	s = socket.socket()
-	s.connect((ROBOT_HOST, Dashboard_PORT))
-	s.send(Message)
-	return
 def read_data(sensor_data):
 	sensor_data['Time'] = round(t1-t0,4)
 	sensor_data['Force'] = round(state.tcp_force_scalar,4)
