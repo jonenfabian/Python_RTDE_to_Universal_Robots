@@ -26,7 +26,7 @@ import struct
 
 class ControlHeader(object):
     __slots__ = ['command', 'size',]
-    
+
     @staticmethod
     def unpack(buf):
         rmd = ControlHeader()
@@ -36,7 +36,7 @@ class ControlHeader(object):
 
 class ControlVersion(object):
     __slots__ = ['major', 'minor', 'bugfix', 'build']
-    
+
     @staticmethod
     def unpack(buf):
         rmd = ControlVersion()
@@ -46,7 +46,7 @@ class ControlVersion(object):
 
 class ReturnValue(object):
     __slots__ = ['success']
-    
+
     @staticmethod
     def unpack(buf):
         rmd = ReturnValue()
@@ -60,7 +60,7 @@ class Message(object):
     ERROR_MESSAGE = 1
     WARNING_MESSAGE = 2
     INFO_MESSAGE = 3
-    
+
     @staticmethod
     def unpack(buf):
         rmd = Message()
@@ -103,6 +103,8 @@ def unpack_field(data, offset, data_type):
     elif(data_type == 'INT32' or
          data_type == 'UINT8'):
         return int(data[offset])
+    elif(data_type == 'BOOL'):
+        return bool(data[offset])
     raise ValueError('unpack_field: unknown data type: ' + data_type)
 
 
@@ -122,7 +124,7 @@ class DataObject(object):
             else:
                 l.append(self.__dict__[names[i]])
         return l
-    
+
     @staticmethod
     def unpack(data, names, types):
         if len(names) != len(types):
@@ -150,7 +152,7 @@ class DataConfig(object):
     def unpack_recipe(buf):
         rmd = DataConfig();
         rmd.id = struct.unpack_from('>B', buf)[0]
-        rmd.types = buf[1:].split(',')
+        rmd.types = buf.decode('utf-8')[1:].split(',')
         rmd.fmt = '>B'
         for i in rmd.types:
             if i=='INT32':
@@ -171,12 +173,14 @@ class DataConfig(object):
                 rmd.fmt += 'Q'
             elif i=='UINT8':
                 rmd.fmt += 'B'
+            elif i =='BOOL':
+                rmd.fmt += '?'
             elif i=='IN_USE':
                 raise ValueError('An input parameter is already in use.')
             else:
                 raise ValueError('Unknown data type: ' + i)
         return rmd
-        
+
     def pack(self, state):
         l = state.pack(self.names, self.types)
         return struct.pack(self.fmt, *l)
@@ -184,4 +188,3 @@ class DataConfig(object):
     def unpack(self, data):
         li =  struct.unpack_from(self.fmt, data)
         return DataObject.unpack(li, self.names, self.types)
-    

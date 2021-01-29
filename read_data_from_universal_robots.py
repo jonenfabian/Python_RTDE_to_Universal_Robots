@@ -8,14 +8,14 @@ import logging
 import rtde as rtde
 import rtde_config as rtde_config
 import socket
-
+import numpy as np
 #Initial Values
 datarate=10 # Time interval for data logging in Hz
 
 
 #######################################################
 
-ROBOT_HOST = '192.168.1.103'
+ROBOT_HOST = 'localhost'#'192.168.1.103'
 ROBOT_PORT = 30004
 config_filename = 'control_loop_configuration.xml'
 
